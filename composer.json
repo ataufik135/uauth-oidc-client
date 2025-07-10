@@ -28,6 +28,13 @@
       "SocialiteProviders\\UAuth\\": "src"
     }
   },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "SocialiteProviders\\UAuth\\UAuthServiceProvider"
+      ]
+    }
+  },
   "conflict": {
     "jp-gauthier/socialiteproviders-oidc": "*"
   },

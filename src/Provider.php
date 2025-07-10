@@ -91,18 +91,6 @@ class Provider extends AbstractProvider
   /**
    * {@inheritdoc}
    */
-  public function getScopes(): array
-  {
-    if ($this->getConfig('scopes')) {
-      return array_merge($this->scopes, explode(' ', $this->getConfig('scopes')));
-    }
-
-    return $this->scopes;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function getTokenUrl()
   {
     return $this->getOpenIdConfig()['token_endpoint'];
@@ -314,13 +302,13 @@ class Provider extends AbstractProvider
 
         'email' => $user['email'] ?? null,
         'name' => $user['name'] ?? null,
-        'nickname' => $user['nickname'] ?? null,
-        'given_name' => $user['given_name'] ?? null,
-        'family_name' => $user['family_name'] ?? null,
+        'username' => $user['preferred_username'] ?? null,
+        'first_name' => $user['given_name'] ?? null,
+        'last_name' => $user['family_name'] ?? null,
+        'picture' => $user['picture'] ?? null,
 
-        'idp' => $user['idp'] ?? null,
-        'roles' => $user['roles'] ?? null,
-        'groups' => $user['groups'] ?? null,
+        'roles' => $user['roles'] ?? [],
+        'groups' => $user['groups'] ?? [],
       ]
     );
   }
@@ -350,17 +338,23 @@ class Provider extends AbstractProvider
    */
   protected function getUserByToken($token)
   {
-    $response = $this->getHttpClient()->get(
-      $this->getUserInfoUrl() . '?' . http_build_query([
-        'access_token' => $token,
-      ]),
-      [
-        RequestOptions::HEADERS => [
-          'Accept' => 'application/json',
-        ],
-      ]
-    );
+    $response = $this->getHttpClient()->get($this->getUserInfoUrl(), [
+      RequestOptions::HEADERS => [
+        'Authorization' => 'Bearer ' . $token,
+        'Accept' => 'application/json',
+      ],
+    ]);
 
     return json_decode((string)$response->getBody(), true);
+  }
+
+  public function getLogoutUrl($redirectUri = null)
+  {
+    $query = http_build_query([
+      'client_id' => $this->clientId,
+      'post_logout_redirect_uri' => $redirectUri ?? $this->redirectUrl,
+    ]);
+
+    return $this->getOpenIdConfig()['end_session_endpoint'] . '?' . $query;
   }
 }
