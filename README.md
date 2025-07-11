@@ -199,6 +199,4 @@ public function __construct()
 ```
 
 ```
-
 Based on the work of [jp-gauthier](https://github.com/jp-gauthier)
-```
