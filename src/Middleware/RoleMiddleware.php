@@ -2,7 +2,6 @@
 
 namespace SocialiteProviders\UAuth\Middleware;
 
-use App\Providers\RouteServiceProvider;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +15,7 @@ class RoleMiddleware
   {
     $user = $request->session()->get('user');
     if (!$user) {
-      abort(403);
+      return redirect()->route('uauth.redirect')->with('error', 'Log in again to continue your session. Your connection was lost.');
     }
 
     $roles = is_array($role) ? $role : explode('|', $role);
@@ -25,6 +24,6 @@ class RoleMiddleware
       return $next($request);
     }
 
-    return redirect(RouteServiceProvider::HOME);
+    return redirect()->back()->with('error', 'You do not have permission to access this resource.');
   }
 }

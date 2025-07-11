@@ -2,8 +2,8 @@
 
 namespace SocialiteProviders\UAuth\Middleware;
 
-use App\Providers\RouteServiceProvider;
 use Closure;
+use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
