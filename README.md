@@ -198,5 +198,6 @@ public function __construct()
 <a href="{{ route('uauth.logout', ['redirect_uri' => 'https://your-redirect-url.com']) }}">Logout</a>
 ```
 
-```
+---
+
 Based on the work of [jp-gauthier](https://github.com/jp-gauthier)
