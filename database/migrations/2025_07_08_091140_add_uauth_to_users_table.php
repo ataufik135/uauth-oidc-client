@@ -12,8 +12,8 @@ return new class extends Migration
   public function up(): void
   {
     Schema::table('users', function (Blueprint $table) {
-      $table->uuid('uauth_id')->unique();
-      $table->text('uauth_access_token');
+      $table->uuid('uauth_id')->nullable()->unique();
+      $table->text('uauth_access_token')->nullable();
       $table->text('uauth_refresh_token')->nullable();
       $table->string('password')->nullable()->change();
     });
