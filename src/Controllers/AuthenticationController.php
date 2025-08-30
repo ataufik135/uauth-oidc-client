@@ -82,7 +82,7 @@ class AuthenticationController extends Controller
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
-    if ($prompt == 'none') {
+    if ($prompt === 'none') {
       return response('', 200)
         ->withHeader('pragma', 'no-cache')
         ->withHeader('cache-control', 'no-store');
