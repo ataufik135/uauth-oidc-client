@@ -72,6 +72,7 @@ class AuthenticationController extends Controller
   public function destroy(Request $request)
   {
     $redirectUri = $request->query('redirect_uri', null);
+    $prompt = $request->query('prompt', null);
     $driver = Socialite::driver($this->provider);
     if (app()->environment('local')) {
       $driver->setHttpClient(new \GuzzleHttp\Client(['verify' => false]));
@@ -80,6 +81,12 @@ class AuthenticationController extends Controller
     Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
+
+    if ($prompt == 'none') {
+      return response('', 200)
+        ->withHeader('pragma', 'no-cache')
+        ->withHeader('cache-control', 'no-store');
+    }
 
     return redirect($driver->getLogoutUrl($redirectUri));
   }
